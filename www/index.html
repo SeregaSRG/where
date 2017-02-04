@@ -1,49 +1,420 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+<head>
+    <script type="text/javascript">
+        $(document).bind("mobileinit", function() {
+            $.support.cors = true;
+            $.mobile.allowCrossDomainPages = true;
+            $.mobile.pushStateEnabled      = false;
+        });
+    </script>
+    <title>**Название**</title>
+    <meta charset="utf-8">
 
-    http://www.apache.org/licenses/LICENSE-2.0
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no">
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
-<html>
-    <head>
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, see:
-            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-        Some notes:
-            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
+    <meta name="theme-color" content="#607D8B">
+
+    <script src="style/material/material.min.js"></script>
+    <link   href="style/material/material.css" rel="stylesheet" >
+</head>
+<body>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">**Название**</span>
         </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-    </body>
-</html>
+    </header>
+    <div class="mdl-layout__drawer">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored add" onclick="logOut()">
+            <i class="large material-icons">power_settings_new</i>
+        </button>
+        <span class="mdl-layout-title" id="userName">**Название**</span>
+        <nav class="mdl-navigation">
+            <!--<a class="mdl-navigation__link" onclick="$('#address_main').show()">Изменить данные</a>
+            <a class="mdl-navigation__link" onclick="findHistory()">История сделок</a>-->
+        </nav>
+    </div>
+
+    <main class="mdl-layout__content">
+        <div class="page-content">
+
+            <!-- Индикатор загрузки -->
+            <div id="loading" class="mdl-progress mdl-js-progress mdl-progress__indeterminate no-display"></div>
+            <!-- !Индикатор загрузки -->
+
+            <!-- Register -->
+            <div id="reg-menu" class="no-display">
+                <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--4dp center">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">Регистрация</h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <form>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="registration_name" class="mdl-textfield__label">Имя</label>
+                                <input type="text" class="mdl-textfield__input" id="registration_name" />
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="registration_surname" class="mdl-textfield__label">Фамилия</label>
+                                <input type="text" class="mdl-textfield__input" id="registration_surname" />
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="registration_phone" class="mdl-textfield__label">Телефон</label>
+                                <input type="tel" class="mdl-textfield__input" id="registration_phone" pattern="-?[0-9]*(\.[0-9]+)?"/>
+                                <span class="mdl-textfield__error">Номер телефона должен содержать только цифры</span>
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="registration_email" class="mdl-textfield__label">Почта</label>
+                                <input type="email" class="mdl-textfield__input" id="registration_email" />
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="registration_password" class="mdl-textfield__label">Пароль</label>
+                                <input type="password" class="mdl-textfield__input" id="registration_password" />
+                                <span class="mdl-textfield__error">Некорректный пароль</span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored no-select" onclick="sendRegistration();">Зарегистрироваться</button>
+                        <button class="mdl-button mdl-js-button mdl-button--primary no-select" onclick="openLogin();" style="float:right">Вход</button>
+                    </div>
+                </div>
+            </div>
+            <!-- !Register -->
+
+            <!-- Login -->
+            <div id="log-menu" class="no-display">
+                <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--4dp center">
+                    <div class="mdl-card__title">
+                        <h1 class="mdl-card__title-text">Вход</h1>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <form>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="log_phone" class="mdl-textfield__label">Телефон</label>
+                                <input type="tel" class="mdl-textfield__input" id="log_phone" pattern="-?[0-9]*(\.[0-9]+)?"/>
+                                <span class="mdl-textfield__error">Номер телефона должен содержать только цифры</span>
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                <label for="log_password" class="mdl-textfield__label">Пароль</label>
+                                <input type="password" class="mdl-textfield__input" id="log_password" />
+                                <span class="mdl-textfield__error">Некорректный пароль</span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored no-select" onclick="sendLogin();">Войти</button>
+                        <button class="mdl-button mdl-js-button mdl-button--primary no-select" onclick='openRegistration()' style='float:right'>Зарегистрироваться</button>
+                    </div>
+                </div>
+            </div>
+            <!-- !Login -->
+
+            <!-- Main -->
+            <div id="main-menu" class="no-display">
+                <div class="mdl-tabs mdl-js-tabs">
+
+                    <!-- Меню -->
+                    <div class="mdl-tabs__tab-bar">
+                        <a href="#tab1" class="mdl-tabs__tab is-active">Отслеживание</a>
+                        <a href="#tab2" id="tab" class="mdl-tabs__tab" onclick="geo();$('#tab').removeAttr('onclick');">Карта</a>
+                    </div>
+                    <!-- !Меню -->
+
+                    <!-- Вкладка 1 -->
+                    <div class="mdl-tabs__panel is-active" id="tab1">
+                        <!-- Главная карточка -->
+                        <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--4dp center" id="main-card">
+
+                            <div class="my-tabs__tab-bar">
+                                <a id="transport-tab" class="my-tabs__tab active" onclick="openTransport()">Транспорт</a>
+                                <a id="friends-tab"   class="my-tabs__tab"        onclick="openFriends()"  >Друзья</a>
+                            </div>
+
+                            <div id="transport-subcard">
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text center">Общественный транспорт</h2>
+                                </div>
+                                <div class="mdl-card__supporting-text">
+                                    <div class="left-line">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="where_label">
+                                            <label for="cityType" class="mdl-textfield__label"><i class="material-icons">location_on</i>   Город</label>
+                                            <input type="text" class="mdl-textfield__input" id="cityType" disabled value="Таганрог" onclick="openCitySelect()"/>
+                                        </div>
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="who_label">
+                                            <label for="transportType" class="mdl-textfield__label"><i class="material-icons">build</i>   На что я сел?</label>
+                                            <input type="text" class="mdl-textfield__input" readonly id="transportType"  onclick="openTypeSelect();"/>
+                                        </div>
+                                        <!--<br><br>
+                                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
+                                            <input type="checkbox" id="switch-2" class="mdl-switch__input">
+                                            <span class="mdl-switch__label">Показывать друзьям</span>
+                                        </label>
+                                        <br><br>-->
+                                    </div>
+                                    <br>
+                                    <div class="mdl-card__actions mdl-card--border">
+                                        <button id="bgGeo-start" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored full-btn no-select" onclick="startBackgroundGeo()">Начать отслеживание</button>
+                                        <button id="bgGeo-stop" class="mdl-button mdl-js-button mdl-button--raised full-btn no-select no-display" onclick="stopBackgroundGeo()">Остановить отслеживание</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="friends-subcard" class="no-display">
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text center">Друзья</h2>
+                                </div>
+                                <div class="mdl-card__supporting-text">
+                                    <span class="log">
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- !Главная карточка -->
+                    </div>
+                    <!-- !Вкладка 1 -->
+
+                    <!-- Вкладка 2 -->
+                    <div class="mdl-tabs__panel" id="tab2">
+                        <div class="filterMenu center" >
+                            <!--<div class="filterMenu_cell">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+                                    <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" checked>
+                                    <span class="mdl-checkbox__label">Маршрутки</span>
+                                </label>
+                            </div>
+                            <div class="filterMenu_cell">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
+                                    <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input" checked>
+                                    <span class="mdl-checkbox__label">Автобусы</span>
+                                </label>
+                            </div>
+                            <div class="filterMenu_cell">
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-3">
+                                    <input type="checkbox" id="checkbox-3" class="mdl-checkbox__input" checked>
+                                    <span class="mdl-checkbox__label">Трамваи</span>
+                                </label>
+                            </div>
+                            <div class="filterMenu_cell">
+                                <div class="material-icons mdl-badge mdl-badge--overlap" style="color: darkgray" onclick="showGetPro()">account_box</div>
+                            </div>-->
+                            <div class="filterMenu_cell">
+                                <div id="mr_control" class="transition material-icons settings-icon" onclick="mrToggle()">directions_bus</div>
+                                <div id="av_control" class="transition material-icons settings-icon" onclick="avToggle()">directions_transit</div>
+                                <div id="tr_control" class="transition material-icons settings-icon" onclick="trToggle()">tram</div>
+                                <div id="account" class="transition material-icons settings-icon" onclick="">account_box</div>
+                            </div>
+                            <div class="filterMenu_cell">
+                                <!--<div class="material-icons" style="color: darkgray; float: right;" onclick="showFilters()">tune</div>-->
+                                <div id="tt3" class="transition material-icons">cloud_download</div>
+                            </div>
+                        </div>
+                        <div id="mapSurface" class="mdl-shadow--4dp"></div>
+                    </div>
+                    <!-- Вкладка 2 -->
+
+                </div>
+            </div>
+            <!-- Main -->
+        </div>
+    </main>
+</div>
+</body>
+
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="app/libs/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="app/libs/server.js"></script>
+<script type="text/javascript" src="app/libs/support.js"></script>
+<script type="text/javascript" src="app/core.js"></script>
+<script type="text/javascript" src="app/view.js"></script>
+<script type="text/javascript" src="app/index.js"></script>
+
+<link   rel="stylesheet"       href="style/css/view.css"/>
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyClNULZknu_QOiAEFhaNy8LiE16Hlx7lYM" async defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+
+
+<script>
+    var settings = new Settings();
+    $(window).load(function(){
+        checkLogin();
+    });
+    window.onblur = function () {
+        $(".log").append('Документ неактивен</br>');
+    };
+    window.onfocus = function () {
+        $(".log").append('Документ активен</br>');
+    };
+</script>
+
+
+<div aria-live="assertive" aria-atomic="true" aria-relevant="text" class="mdl-snackbar mdl-js-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button type="button" class="mdl-snackbar__action"></button>
+</div>
+
+<div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--16dp pop-up--main no-display" id="transport-card">
+    <div class="pop-up--main__content">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%">
+            <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric">Вид транспорта</th>
+                <th>Номер</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Трамвай</td>
+                <td>9</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-1">
+                        <input type="radio" id="op-1" class="mdl-radio__button" name="category" value="tr9">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Трамвай</td>
+                <td>5</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-2">
+                        <input type="radio" id="op-2" class="mdl-radio__button"  name="category" value="tr8">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr> <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Маршрутка</td>
+                <td>73</td>
+                <td>
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="op-3">
+                        <input type="radio" id="op-3" class="mdl-radio__button"  name="category" value="mr73">
+                        <span class="mdl-radio__label"> </span>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored full-btn" onclick="selectType()">Сохранить</button>
+        <button class="mdl-button mdl-js-button full-btn" onclick="closeTypeSelect()">Отменить</button>
+    </div>
+</div>
+
