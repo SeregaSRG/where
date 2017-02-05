@@ -130,11 +130,11 @@
                         <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--4dp center" id="main-card">
 
                             <div class="my-tabs__tab-bar">
-                                <a id="transport-tab" class="my-tabs__tab active" onclick="openTransport()">Транспорт</a>
-                                <a id="friends-tab"   class="my-tabs__tab"        onclick="openFriends()"  >Друзья</a>
+                                <a id="transport-tab" class="my-tabs__tab"          onclick="openTransport()">Транспорт</a>
+                                <a id="friends-tab"   class="my-tabs__tab active"   onclick="openFriends()"  >Друзья</a>
                             </div>
-
-                            <div id="transport-subcard">
+                            <!-- Вкладка транспорта -->
+                            <div id="transport-subcard" class="no-display">
                                 <div class="mdl-card__title">
                                     <h2 class="mdl-card__title-text center">Общественный транспорт</h2>
                                 </div>
@@ -162,8 +162,9 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div id="friends-subcard" class="no-display">
+                            <!-- !Вкладка транспорта -->
+                            <!-- Вкладка Друзей -->
+                            <div id="friends-subcard">
                                 <div class="mdl-card__title">
                                     <h2 class="mdl-card__title-text center">Друзья</h2>
                                 </div>
@@ -172,7 +173,7 @@
                                     </span>
                                 </div>
                             </div>
-
+                            <!-- !Вкладка Друзей -->
                         </div>
                         <!-- !Главная карточка -->
                     </div>
@@ -245,12 +246,14 @@
     $(window).load(function(){
         checkLogin();
     });
-    window.onblur = function () {
+
+    function onPause() {
         $(".log").append('Документ неактивен</br>');
-    };
-    window.onfocus = function () {
+    }
+    function onResume() {
         $(".log").append('Документ активен</br>');
-    };
+        myalert("Hi");
+    }
 </script>
 
 
